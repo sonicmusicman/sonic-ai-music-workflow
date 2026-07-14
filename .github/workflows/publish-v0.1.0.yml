@@ -15,15 +15,14 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Create release if it does not exist
+      - name: Create release and record completion
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           if gh release view v0.1.0 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             echo "Release v0.1.0 already exists."
-            exit 0
-          fi
-          cat > "$RUNNER_TEMP/release-notes.md" <<'NOTES'
+          else
+            cat > "$RUNNER_TEMP/release-notes.md" <<'NOTES'
           Initial public release of Sonic AI Music Workflow.
 
           Highlights:
@@ -36,8 +35,16 @@ jobs:
           - Local-first design with no required account or server
           - Open-source documentation, issue templates, security policy, and contribution guidelines
           NOTES
-          gh release create v0.1.0 \
-            --repo "$GITHUB_REPOSITORY" \
-            --target "$GITHUB_SHA" \
-            --title "Sonic AI Music Workflow v0.1.0" \
-            --notes-file "$RUNNER_TEMP/release-notes.md"
+            gh release create v0.1.0 \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "$GITHUB_SHA" \
+              --title "Sonic AI Music Workflow v0.1.0" \
+              --notes-file "$RUNNER_TEMP/release-notes.md"
+          fi
+
+          marker_content="$(printf 'Release v0.1.0 created and verified by GitHub Actions.\n' | base64 -w0)"
+          gh api \
+            --method PUT \
+            "repos/$GITHUB_REPOSITORY/contents/.github/release-v0.1.0-complete" \
+            -f message="Record v0.1.0 release completion" \
+            -f content="$marker_content"

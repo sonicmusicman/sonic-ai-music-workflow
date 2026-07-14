@@ -1,0 +1,27 @@
+name: Feature request
+description: Propose a workflow improvement
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Describe the real musician workflow problem before proposing a feature.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+    validations:
+      required: true
+  - type: checkboxes
+    id: principles
+    attributes:
+      label: Project principles
+      options:
+        - label: The core workflow remains usable without a paid account.
+          required: true
+        - label: The feature does not require uploading private creative material by default.
+          required: true

@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="A local-first open-source workflow tool for independent musicians using AI-assisted music creation." />
+  <title>Sonic AI Music Workflow</title>
+  <style>
+    :root{--bg:#0f1115;--panel:#171a21;--text:#f4f5f7;--muted:#a7adbb;--line:#2a2f3a;--accent:#7dd3fc;--ok:#86efac;--warn:#fcd34d;--danger:#fca5a5;--shadow:0 10px 30px rgba(0,0,0,.25)}
+    *{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,#0c0e12,#12151c 45%,#0f1115);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}
+    a{color:var(--accent)} .wrap{max-width:1180px;margin:auto;padding:24px}.hero{padding:24px 0 12px}.hero h1{margin:0;font-size:clamp(30px,6vw,56px);letter-spacing:-.04em}.hero p{max-width:820px;color:var(--muted);font-size:18px}.badge{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:6px 10px;color:var(--muted);font-size:13px;margin-right:8px}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{grid-column:span 12;background:rgba(23,26,33,.94);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+    @media(min-width:900px){.half{grid-column:span 6}.third{grid-column:span 4}.twoThird{grid-column:span 8}}
+    h2{margin:0 0 12px;font-size:22px} h3{margin:18px 0 8px;font-size:16px;color:var(--accent)} label{display:block;font-weight:700;margin:10px 0 6px}.hint{font-size:13px;color:var(--muted);font-weight:400}.row{display:grid;grid-template-columns:1fr;gap:12px}@media(min-width:700px){.row.two{grid-template-columns:1fr 1fr}.row.three{grid-template-columns:repeat(3,1fr)}}
+    input,textarea,select{width:100%;background:#10131a;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:11px 12px;font:inherit}textarea{min-height:110px;resize:vertical}input:focus,textarea:focus,select:focus{outline:2px solid rgba(125,211,252,.3);border-color:var(--accent)}
+    button{border:0;border-radius:12px;padding:11px 15px;font-weight:800;cursor:pointer;background:var(--accent);color:#061016}button.secondary{background:#272c36;color:var(--text);border:1px solid var(--line)}button.danger{background:#3a2024;color:#ffd9dd;border:1px solid #6f3038}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}.output{white-space:pre-wrap;background:#0d1016;border:1px dashed #3b4350;border-radius:12px;padding:14px;min-height:120px;color:#e8edf5}.status{font-size:13px;color:var(--ok);min-height:20px;margin-top:8px}
+    table{width:100%;border-collapse:collapse;min-width:900px}th,td{border-bottom:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}th{color:var(--muted);font-size:13px}.scroll{overflow:auto}.score{font-variant-numeric:tabular-nums}.footer{color:var(--muted);padding:30px 0;text-align:center}.small{font-size:13px;color:var(--muted)}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <span class="badge">Open source</span><span class="badge">Local-first</span><span class="badge">No account required</span>
+    <h1>Sonic AI Music Workflow</h1>
+    <p>給獨立音樂人的歌曲企劃、參考曲分析、Suno／Lyria 提示詞整理與生成版本紀錄工具。核心功能完全在瀏覽器本機運作，不會自動上傳你的創作資料。</p>
+  </header>
+
+  <main class="grid">
+    <section class="card twoThird">
+      <h2>1. 歌曲企劃</h2>
+      <div class="row two">
+        <div><label>歌曲名稱</label><input id="title" placeholder="例如：門外" /></div>
+        <div><label>創作者／專案</label><input id="creator" placeholder="例如：Sonic Lin" /></div>
+      </div>
+      <div class="row three">
+        <div><label>語言</label><select id="language"><option>繁體中文</option><option>英文</option><option>日文</option><option>純音樂</option></select></div>
+        <div><label>主唱</label><select id="vocal"><option>男聲</option><option>女聲</option><option>男女對唱</option><option>純音樂</option></select></div>
+        <div><label>BPM</label><input id="bpm" type="number" min="40" max="220" value="90" /></div>
+      </div>
+      <div class="row two">
+        <div><label>Key</label><input id="key" placeholder="例如：A major" /></div>
+        <div><label>主要曲風</label><input id="genre" placeholder="例如：Mandopop, R&B, City Pop" /></div>
+      </div>
+      <label>歌曲主題</label><textarea id="theme" placeholder="這首歌真正要談的事情是什麼？"></textarea>
+      <label>一句話故事</label><textarea id="story" placeholder="誰，在什麼場景，因為什麼衝突，最後有什麼改變？"></textarea>
+      <div class="row two">
+        <div><label>主要情緒</label><input id="emotion" placeholder="例如：克制、孤獨、深夜感" /></div>
+        <div><label>不要出現的元素</label><input id="avoid" placeholder="例如：過度灑狗血、EDM drop、童聲" /></div>
+      </div>
+      <label>歌曲結構</label><input id="structure" value="Intro → Verse 1 → Pre-Chorus → Chorus → Verse 2 → Pre-Chorus → Chorus → Bridge → Final Chorus → Outro" />
+      <div class="actions"><button onclick="generateBrief()">產生歌曲藍圖</button><button class="secondary" onclick="saveAll()">儲存到本機</button></div>
+      <div id="saveStatus" class="status"></div>
+    </section>
+
+    <aside class="card third">
+      <h2>2. 參考曲分析</h2>
+      <label>參考歌曲</label><input id="reference" placeholder="歌手－歌名，或只寫聲音方向" />
+      <label>節奏與律動</label><textarea id="rhythm" placeholder="拍號、速度感、鼓組、groove"></textarea>
+      <label>核心樂器</label><textarea id="instruments" placeholder="鋼琴、Rhodes、木吉他、合成器等"></textarea>
+      <label>人聲特徵</label><textarea id="vocalStyle" placeholder="音域、咬字、氣聲、真假音、距離感"></textarea>
+      <label>編曲動態</label><textarea id="dynamics" placeholder="何時加入樂器、何處抽空、Final Chorus 如何升級"></textarea>
+      <label>製作質感</label><textarea id="production" placeholder="乾淨、復古、Tape、Lo-fi、寬廣、貼耳"></textarea>
+    </aside>
+
+    <section class="card half">
+      <h2>3. 歌曲藍圖輸出</h2>
+      <div id="briefOutput" class="output">填寫上方資料後按「產生歌曲藍圖」。</div>
+      <div class="actions"><button class="secondary" onclick="copyText('briefOutput')">複製藍圖</button><button class="secondary" onclick="downloadMarkdown()">匯出 Markdown</button></div>
+    </section>
+
+    <section class="card half">
+      <h2>4. AI 音樂提示詞</h2>
+      <p class="small">這裡產生的是可編輯草稿，不模仿特定在世歌手的獨特聲音。</p>
+      <div class="row two">
+        <div><label>平台</label><select id="platform"><option>Suno</option><option>Lyria</option><option>通用文字模型</option></select></div>
+        <div><label>年代／場景</label><input id="era" placeholder="例如：late-night 1990s R&B" /></div>
+      </div>
+      <label>額外聲音要求</label><textarea id="extraStyle" placeholder="例如：Fender Rhodes, muted guitar, restrained verse, memorable chorus hook"></textarea>
+      <div class="actions"><button onclick="generatePrompt()">產生提示詞</button></div>
+      <div id="promptOutput" class="output">提示詞會顯示在這裡。</div>
+      <div class="actions"><button class="secondary" onclick="copyText('promptOutput')">複製提示詞</button></div>
+    </section>
+
+    <section class="card">
+      <h2>5. 生成版本紀錄</h2>
+      <div class="row three">
+        <div><label>模型／版本</label><input id="model" placeholder="例如：Suno v4.5+" /></div>
+        <div><label>Weirdness</label><input id="weirdness" type="number" min="0" max="100" value="20" /></div>
+        <div><label>Style Influence</label><input id="influence" type="number" min="0" max="100" value="80" /></div>
+      </div>
+      <div class="row three">
+        <div><label>旋律分數 1–10</label><input id="melodyScore" type="number" min="1" max="10" value="5" /></div>
+        <div><label>編曲分數 1–10</label><input id="arrangementScore" type="number" min="1" max="10" value="5" /></div>
+        <div><label>歌詞／咬字分數 1–10</label><input id="lyricsScore" type="number" min="1" max="10" value="5" /></div>
+      </div>
+      <label>版本連結或檔名</label><input id="versionLink" placeholder="可填 Suno 連結、檔名或內部編號" />
+      <label>聽感問題與下一步</label><textarea id="versionNotes" placeholder="例如：編曲質感可以，但副歌旋律沒有 Hook；下次縮短主歌音域並讓副歌第一句重複。"></textarea>
+      <div class="actions"><button onclick="addVersion()">加入版本紀錄</button><button class="secondary" onclick="exportJSON()">匯出 JSON</button><label style="margin:0"><input id="importFile" type="file" accept="application/json" style="display:none" onchange="importJSON(event)"><button type="button" class="secondary" onclick="document.getElementById('importFile').click()">匯入 JSON</button></label><button class="danger" onclick="clearVersions()">清除紀錄</button></div>
+      <div id="comparison" class="status"></div>
+      <div class="scroll"><table><thead><tr><th>#</th><th>模型</th><th>參數</th><th>旋律</th><th>編曲</th><th>歌詞</th><th>平均</th><th>連結／檔名</th><th>問題與下一步</th><th></th></tr></thead><tbody id="versionTable"></tbody></table></div>
+    </section>
+  </main>
+  <footer class="footer">Sonic AI Music Workflow · MIT License · Your ideas stay in your browser unless you export them.</footer>
+</div>
+<script>
+const ids=['title','creator','language','vocal','bpm','key','genre','theme','story','emotion','avoid','structure','reference','rhythm','instruments','vocalStyle','dynamics','production','platform','era','extraStyle','model','weirdness','influence'];
+let versions=[];
+const v=id=>document.getElementById(id).value.trim();
+function safe(s){return s||'未填寫'}
+function collect(){const data={};ids.forEach(id=>data[id]=document.getElementById(id).value);data.versions=versions;return data}
+function saveAll(){localStorage.setItem('sonic-ai-music-workflow',JSON.stringify(collect()));document.getElementById('saveStatus').textContent='已儲存到這台裝置的瀏覽器。'}
+function loadAll(){try{const raw=localStorage.getItem('sonic-ai-music-workflow');if(!raw)return;const data=JSON.parse(raw);ids.forEach(id=>{if(data[id]!==undefined)document.getElementById(id).value=data[id]});versions=Array.isArray(data.versions)?data.versions:[];renderVersions();generateBrief()}catch(e){console.warn(e)}}
+function generateBrief(){const text=`# ${safe(v('title'))}\n\n## 一句話定位\n一首以「${safe(v('theme'))}」為核心、由${safe(v('vocal'))}演唱的${safe(v('genre'))}作品；情緒聚焦於${safe(v('emotion'))}。\n\n## 故事\n${safe(v('story'))}\n\n## 製作規格\n- 語言：${safe(v('language'))}\n- BPM：${safe(v('bpm'))}\n- Key：${safe(v('key'))}\n- 結構：${safe(v('structure'))}\n- 參考方向：${safe(v('reference'))}\n- 節奏與律動：${safe(v('rhythm'))}\n- 核心樂器：${safe(v('instruments'))}\n- 人聲特徵：${safe(v('vocalStyle'))}\n- 編曲動態：${safe(v('dynamics'))}\n- 製作質感：${safe(v('production'))}\n- 排除元素：${safe(v('avoid'))}\n\n## 驗收標準\n1. Verse 1 建立人物與場景，不只描述抽象情緒。\n2. Verse 2 推進事件，不能只是換句話重複。\n3. Chorus 前兩句必須在第一次聽後仍可辨認，並有短而清楚的 Hook。\n4. Bridge 必須改變視角、情緒或資訊。\n5. Final Chorus 至少在和聲、節奏、配器或歌詞上升級一項。`;
+document.getElementById('briefOutput').textContent=text;saveAll();}
+function generatePrompt(){const p=v('platform');let prompt='';if(p==='Lyria'){prompt=`Mood: ${safe(v('emotion'))}. Instruments: ${safe(v('instruments'))}. Dynamics: ${safe(v('dynamics'))}. Style: ${safe(v('genre'))}, ${safe(v('era'))}, ${safe(v('production'))}. Tempo: ${safe(v('bpm'))} BPM. Vocal: ${safe(v('vocal'))}, ${safe(v('vocalStyle'))}. Additional direction: ${safe(v('extraStyle'))}. Avoid: ${safe(v('avoid'))}.`;}
+else{prompt=`${safe(v('genre'))}, ${safe(v('era'))}, ${safe(v('bpm'))} BPM, ${safe(v('vocal'))}, ${safe(v('emotion'))}. ${safe(v('rhythm'))}. Core instruments: ${safe(v('instruments'))}. Vocal character: ${safe(v('vocalStyle'))}. Arrangement arc: ${safe(v('dynamics'))}. Production: ${safe(v('production'))}. ${safe(v('extraStyle'))}. Strong singable topline, controlled verse range, clear pre-chorus lift, concise memorable chorus hook, final chorus escalation. Avoid: ${safe(v('avoid'))}.`;}
+document.getElementById('promptOutput').textContent=prompt.replace(/\s+/g,' ').trim();saveAll();}
+function addVersion(){const item={model:v('model')||'未命名版本',weirdness:Number(v('weirdness'))||0,influence:Number(v('influence'))||0,melody:Number(v('melodyScore'))||0,arrangement:Number(v('arrangementScore'))||0,lyrics:Number(v('lyricsScore'))||0,link:v('versionLink'),notes:v('versionNotes'),createdAt:new Date().toISOString()};versions.push(item);renderVersions();saveAll();}
+function renderVersions(){const tbody=document.getElementById('versionTable');tbody.innerHTML='';versions.forEach((x,i)=>{const avg=((x.melody+x.arrangement+x.lyrics)/3).toFixed(1);const tr=document.createElement('tr');tr.innerHTML=`<td>${i+1}</td><td>${escapeHtml(x.model)}</td><td>W ${x.weirdness}<br>S ${x.influence}</td><td class="score">${x.melody}</td><td class="score">${x.arrangement}</td><td class="score">${x.lyrics}</td><td class="score">${avg}</td><td>${escapeHtml(x.link||'—')}</td><td>${escapeHtml(x.notes||'—')}</td><td><button class="danger" onclick="removeVersion(${i})">刪除</button></td>`;tbody.appendChild(tr)});if(versions.length){const best=versions.map((x,i)=>({i,avg:(x.melody+x.arrangement+x.lyrics)/3})).sort((a,b)=>b.avg-a.avg)[0];document.getElementById('comparison').textContent=`目前平均分最高：版本 ${best.i+1}（${best.avg.toFixed(1)} 分）。請優先保留它的有效元素，而不是整首重做。`;}else document.getElementById('comparison').textContent='尚未加入版本紀錄。'}
+function removeVersion(i){versions.splice(i,1);renderVersions();saveAll()}function clearVersions(){if(confirm('確定清除所有版本紀錄？')){versions=[];renderVersions();saveAll()}}
+function copyText(id){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>alert('已複製'))}
+function exportJSON(){const blob=new Blob([JSON.stringify(collect(),null,2)],{type:'application/json'});downloadBlob(blob,(v('title')||'sonic-music-project')+'.json')}
+function importJSON(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(r.result);ids.forEach(id=>{if(data[id]!==undefined)document.getElementById(id).value=data[id]});versions=Array.isArray(data.versions)?data.versions:[];renderVersions();generateBrief();saveAll();alert('匯入完成')}catch(err){alert('JSON 格式錯誤')}};r.readAsText(f)}
+function downloadMarkdown(){const blob=new Blob([document.getElementById('briefOutput').textContent],{type:'text/markdown'});downloadBlob(blob,(v('title')||'song-brief')+'.md')}
+function downloadBlob(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+loadAll();
+</script>
+</body>
+</html>
